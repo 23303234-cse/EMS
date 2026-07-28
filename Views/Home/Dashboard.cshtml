@@ -1,0 +1,549 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="row mb-4">
+
+        <div class="col-lg-8">
+            <h2 class="fw-bold">
+                📊 Shopping Management Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Welcome back,
+                <strong>@Context.Session.GetString("UserName")</strong>
+            </p>
+        </div>
+
+        <div class="col-lg-4 text-end">
+
+            <a asp-controller="Profile"
+               asp-action="Index"
+               class="btn btn-outline-primary">
+
+                👤 My Profile
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Statistics Cards -->
+
+    <div class="row g-4">
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Total Products
+                            </h6>
+
+                            <h2 class="fw-bold text-primary">
+
+                                @ViewBag.TotalProducts
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            📦
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Categories
+                            </h6>
+
+                            <h2 class="fw-bold text-success">
+
+                                @ViewBag.TotalCategories
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            📂
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Users
+                            </h6>
+
+                            <h2 class="fw-bold text-info">
+
+                                @ViewBag.TotalUsers
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            👥
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Orders
+                            </h6>
+
+                            <h2 class="fw-bold text-warning">
+
+                                @ViewBag.TotalOrders
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            🛒
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Revenue
+                            </h6>
+
+                            <h2 class="fw-bold text-success">
+
+                                $@string.Format("{0:N2}", ViewBag.TotalRevenue)
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            💰
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl-4 col-md-6">
+
+            <div class="card border-0 shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Low Stock
+                            </h6>
+
+                            <h2 class="fw-bold text-danger">
+
+                                @ViewBag.LowStock
+
+                            </h2>
+
+                        </div>
+
+                        <div style="font-size:55px;">
+                            ⚠️
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Charts & Quick Actions -->
+
+    <div class="row">
+
+        <!-- Sales Chart -->
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-lg mb-4">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        📈 Monthly Sales Analytics
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="salesChart" height="110"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Quick Actions -->
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-lg mb-4">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+                        ⚡ Quick Actions
+                    </h5>
+
+                </div>
+
+                <div class="card-body d-grid gap-2">
+
+                    @if (Context.Session.GetString("UserRole") == "Admin")
+                    {
+
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           class="btn btn-primary">
+
+                            📦 Manage Products
+
+                        </a>
+
+                        <a asp-controller="Category"
+                           asp-action="Index"
+                           class="btn btn-success">
+
+                            📂 Manage Categories
+
+                        </a>
+
+                        <a asp-controller="Order"
+                           asp-action="Index"
+                           class="btn btn-warning">
+
+                            🛒 Manage Orders
+
+                        </a>
+
+                        <a asp-controller="Profile"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+
+                            👤 My Profile
+
+                        </a>
+
+                    }
+                    else
+                    {
+
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           class="btn btn-success">
+
+                            🛍 Shop Products
+
+                        </a>
+
+                        <a asp-controller="Cart"
+                           asp-action="Index"
+                           class="btn btn-warning">
+
+                            🛒 My Cart
+
+                        </a>
+
+                        <a asp-controller="Order"
+                           asp-action="MyOrders"
+                           class="btn btn-info">
+
+                            📦 My Orders
+
+                        </a>
+
+                        <a asp-controller="Profile"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+
+                            👤 My Profile
+
+                        </a>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Dashboard Information -->
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 mb-4">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        💰 Revenue Summary
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <h2 class="text-success">
+
+                        $@string.Format("{0:N2}", ViewBag.TotalRevenue)
+
+                    </h2>
+
+                    <p class="text-muted">
+
+                        Total revenue generated from all completed orders.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 mb-4">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h5 class="mb-0">
+
+                        ⚠ Low Stock Alert
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <h2 class="text-danger">
+
+                        @ViewBag.LowStock
+
+                    </h2>
+
+                    <p class="text-muted">
+
+                        Products currently running low on stock.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Footer -->
+    <div class="mt-4 text-center text-muted">
+        <hr />
+        <small>
+            © @DateTime.Now.Year EMS - Shopping Management System |
+            Dashboard Version 2.0
+        </small>
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const months = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Months));
+        const sales = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Sales));
+
+        const ctx = document.getElementById('salesChart');
+
+        if (ctx) {
+
+            new Chart(ctx, {
+
+                type: 'bar',
+
+                data: {
+
+                    labels: months,
+
+                    datasets: [{
+
+                        label: 'Monthly Orders',
+
+                        data: sales,
+
+                        backgroundColor: [
+                            '#0d6efd',
+                            '#198754',
+                            '#ffc107',
+                            '#dc3545',
+                            '#20c997',
+                            '#6f42c1'
+                        ],
+
+                        borderRadius: 8
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+}

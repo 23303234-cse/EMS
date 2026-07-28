@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "K5CWwc8wxKg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tonoy\\OneDrive\\Desktop\\EMS\\EMS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tonoy\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\mongodb.bson\\3.10.0\\mongodb.bson.3.10.0.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\mongodb.driver\\3.10.0\\mongodb.driver.3.10.0.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\questpdf\\2026.7.1\\questpdf.2026.7.1.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\sharpcompress\\0.48.1\\sharpcompress.0.48.1.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\snappier\\1.3.1\\snappier.1.3.1.nupkg.sha512",
+    "C:\\Users\\tonoy\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
+  ],
+  "logs": []
+}

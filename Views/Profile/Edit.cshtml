@@ -1,0 +1,89 @@
+@model EMS.Models.User
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<h2 class="mb-4">✏️ Edit Profile</h2>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="Role" type="hidden" />
+            <input asp-for="Password" type="hidden" />
+            <input asp-for="ProfileImage" type="hidden" />
+
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email"
+                       class="form-control"
+                       readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input asp-for="Phone" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Address</label>
+                <textarea asp-for="Address"
+                          class="form-control"
+                          rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Current Profile Picture</label>
+                <br />
+
+                @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                {
+                    <img src="~/images/profiles/@Model.ProfileImage"
+                         width="120"
+                         height="120"
+                         class="img-thumbnail rounded-circle mb-2" />
+                }
+                else
+                {
+                    <p class="text-muted">No profile picture uploaded.</p>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Upload New Profile Picture</label>
+
+                <input type="file"
+                       name="profileImage"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png" />
+            </div>
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["Error"]
+                </div>
+            }
+
+            <button type="submit" class="btn btn-success">
+                Save Changes
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

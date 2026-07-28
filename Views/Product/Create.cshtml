@@ -1,0 +1,60 @@
+@model EMS.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+    var categories = ViewBag.Categories as List<EMS.Models.Category>;
+}
+
+<h2>Add Product</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label class="form-label">Product Name</label>
+        <input asp-for="ProductName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+
+        <select asp-for="Category" class="form-control">
+
+            <option value="">-- Select Category --</option>
+
+            @foreach (var item in categories)
+            {
+                <option value="@item.CategoryName">
+                    @item.CategoryName
+                </option>
+            }
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Stock</label>
+        <input asp-for="Stock" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Product Image</label>
+        <input type="file"
+               name="imageFile"
+               class="form-control"
+               accept="image/*" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Back
+    </a>
+
+</form>

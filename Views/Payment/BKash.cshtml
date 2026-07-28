@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "bKash Payment";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header text-center text-white"
+                     style="background:#E2136E;">
+
+                    <h3 class="mb-0">
+                        bKash Payment
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <h5>Demo Payment</h5>
+
+                        <p class="text-muted">
+                            This is a demo payment page.
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Success" method="post">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                bKash Number
+                            </label>
+
+                            <input class="form-control"
+                                   type="text"
+                                   placeholder="01XXXXXXXXX"
+                                   required />
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                PIN
+                            </label>
+
+                            <input class="form-control"
+                                   type="password"
+                                   placeholder="****"
+                                   required />
+
+                        </div>
+
+                        <button class="btn w-100 text-white"
+                                style="background:#E2136E;">
+
+                            Pay Now
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

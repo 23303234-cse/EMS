@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Nagad Payment";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header text-white text-center"
+                     style="background:#F58220;">
+
+                    <h3 class="mb-0">
+                        Nagad Payment
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <h5>Demo Payment</h5>
+
+                        <p class="text-muted">
+                            Complete your payment using Nagad.
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Success" method="post">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Nagad Number
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="01XXXXXXXXX"
+                                   required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                PIN
+                            </label>
+
+                            <input type="password"
+                                   class="form-control"
+                                   placeholder="****"
+                                   required>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn w-100 text-white"
+                                style="background:#F58220;">
+
+                            Pay Now
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "Card Payment";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0">
+
+                <div class="card-header bg-primary text-white text-center">
+
+                    <h3 class="mb-0">
+                        Credit / Debit Card Payment
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <h5>Secure Demo Payment</h5>
+
+                        <p class="text-muted">
+                            Enter your card details below.
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Success" method="post">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Card Holder Name
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="John Smith"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Card Number
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="1234 5678 9012 3456"
+                                maxlength="19"
+                                required>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+                                        Expiry Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="MM/YY"
+                                        required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+                                        CVV
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        placeholder="123"
+                                        maxlength="4"
+                                        required>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+
+                            💳 Pay Now
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

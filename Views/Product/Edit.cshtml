@@ -1,0 +1,72 @@
+@model EMS.Models.Product
+
+@{
+    var categories = ViewBag.Categories as List<EMS.Models.Category>;
+}
+
+<h2>Edit Product</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Image" />
+
+    <div class="mb-3">
+        <label>Product Name</label>
+        <input asp-for="ProductName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+
+        <select asp-for="Category" class="form-control">
+
+            @foreach (var item in categories)
+            {
+                <option value="@item.CategoryName">
+                    @item.CategoryName
+                </option>
+            }
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Stock</label>
+        <input asp-for="Stock" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Current Image</label><br />
+
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="~/images/products/@Model.Image"
+                 width="150"
+                 class="img-thumbnail mb-2" />
+        }
+        else
+        {
+            <p>No Image Available</p>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label>Change Image</label>
+        <input type="file" name="imageFile" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Update
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Back
+    </a>
+
+</form>

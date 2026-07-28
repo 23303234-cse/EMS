@@ -1,0 +1,22 @@
+@model EMS.Models.User
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+
+    <label>Email</label><br />
+    <input asp-for="Email" />
+    <br /><br />
+
+    <label>Password</label><br />
+    <input asp-for="Password" type="password" />
+    <br /><br />
+
+    <button type="submit">Login</button>
+
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p style="color:red">@ViewBag.Message</p>
+}

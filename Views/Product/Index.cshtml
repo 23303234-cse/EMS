@@ -1,0 +1,103 @@
+@model List<EMS.Models.Product>
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<h2>Product List</h2>
+
+<form method="get" asp-action="Index" class="mb-3">
+    <input type="text"
+           name="search"
+           placeholder="Search Product..."
+           class="form-control d-inline-block"
+           style="width:250px;" />
+
+    <button type="submit" class="btn btn-primary">
+        Search
+    </button>
+</form>
+
+@if (Context.Session.GetString("UserRole") == "Admin")
+{
+    <a asp-action="Create" class="btn btn-success mb-3">
+        Add Product
+    </a>
+}
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    @foreach (var product in Model)
+    {
+        <tr>
+
+            <td style="width:120px">
+
+                @if (!string.IsNullOrEmpty(product.Image))
+                {
+                    <img src="~/images/products/@product.Image"
+                         width="80"
+                         height="80"
+                         style="object-fit:cover;border-radius:8px;" />
+                }
+                else
+                {
+                    <span>No Image</span>
+                }
+
+            </td>
+
+            <td>@product.ProductName</td>
+            <td>@product.Category</td>
+            <td>@product.Price</td>
+            <td>@product.Stock</td>
+
+            <td>
+
+                @if (Context.Session.GetString("UserRole") == "Admin")
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@product.Id"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@product.Id"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure?')">
+                        Delete
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Cart"
+                       asp-action="Add"
+                       asp-route-id="@product.Id"
+                       class="btn btn-success btn-sm">
+                        🛒 Add to Cart
+                    </a>
+                }
+
+            </td>
+
+        </tr>
+    }
+
+    </tbody>
+
+</table>

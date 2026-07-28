@@ -1,0 +1,193 @@
+@model List<EMS.Models.Cart>
+
+@{
+    ViewData["Title"] = "Checkout";
+    decimal grandTotal = Model.Sum(x => x.Total);
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">🛒 Checkout</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Order Summary</h5>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Total</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            <strong>@item.ProductName</strong>
+                        </td>
+
+                        <td class="text-center">
+                            ৳ @item.Price
+                        </td>
+
+                        <td class="text-center">
+                            @item.Quantity
+                        </td>
+
+                        <td class="text-center text-success fw-bold">
+                            ৳ @item.Total
+                        </td>
+
+                    </tr>
+                }
+
+                </tbody>
+
+            </table>
+
+            <div class="text-end mb-4">
+
+                <h3>
+
+                    Grand Total :
+
+                    <span class="text-success">
+
+                        ৳ @grandTotal
+
+                    </span>
+
+                </h3>
+
+            </div>
+
+            <form asp-action="PlaceOrder" method="post">
+
+                <div class="card border-primary mb-4">
+
+                    <div class="card-header bg-primary text-white">
+
+                        <h5 class="mb-0">
+                            💳 Select Payment Method
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="form-check mb-3">
+
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="paymentMethod"
+                                   id="cod"
+                                   value="Cash on Delivery"
+                                   checked>
+
+                            <label class="form-check-label" for="cod">
+
+                                💵 Cash on Delivery
+
+                            </label>
+
+                        </div>
+
+                        <div class="form-check mb-3">
+
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="paymentMethod"
+                                   id="bkash"
+                                   value="bKash">
+
+                            <label class="form-check-label" for="bkash">
+
+                                📱 bKash
+
+                            </label>
+
+                        </div>
+
+                        <div class="form-check mb-3">
+
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="paymentMethod"
+                                   id="nagad"
+                                   value="Nagad">
+
+                            <label class="form-check-label" for="nagad">
+
+                                💳 Nagad
+
+                            </label>
+
+                        </div>
+
+                        <div class="form-check">
+
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="paymentMethod"
+                                   id="card"
+                                   value="Credit/Debit Card">
+
+                            <label class="form-check-label" for="card">
+
+                                💳 Credit / Debit Card
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-controller="Cart"
+                       asp-action="Index"
+                       class="btn btn-secondary btn-lg">
+
+                        ← Back to Cart
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success btn-lg">
+
+                        ✅ Place Order
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,137 @@
+@using Microsoft.AspNetCore.Http
+@model EMS.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2 class="mb-4">Order Details</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <p>
+            <strong>Order ID:</strong>
+            @Model.Id
+        </p>
+
+        <p>
+            <strong>User:</strong>
+            @Model.UserEmail
+        </p>
+
+        <p>
+            <strong>Order Date:</strong>
+            @Model.OrderDate.ToString("dd MMM yyyy hh:mm tt")
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+
+            @if (Model.Status == "Pending")
+            {
+                <span class="badge bg-warning text-dark">
+                    Pending
+                </span>
+            }
+            else if (Model.Status == "Processing")
+            {
+                <span class="badge bg-primary">
+                    Processing
+                </span>
+            }
+            else if (Model.Status == "Delivered")
+            {
+                <span class="badge bg-success">
+                    Delivered
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">
+                    @Model.Status
+                </span>
+            }
+        </p>
+
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
+        <tr>
+            <th style="width:120px;">Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+
+                <td>
+
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="~/images/products/@item.Image"
+                             width="80"
+                             height="80"
+                             style="object-fit:cover;border-radius:8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+
+                </td>
+
+                <td>@item.ProductName</td>
+
+                <td>৳ @item.Price</td>
+
+                <td>@item.Quantity</td>
+
+                <td>৳ @(item.Price * item.Quantity)</td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<div class="text-end mt-3">
+
+    <h3>
+        Grand Total :
+        <span class="text-success">
+            ৳ @Model.TotalAmount
+        </span>
+    </h3>
+
+</div>
+
+<div class="mt-4">
+
+    @if (Context.Session.GetString("UserRole") == "Admin")
+    {
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            ← Back to Orders
+        </a>
+    }
+    else
+    {
+        <a asp-action="MyOrders"
+           class="btn btn-secondary">
+            ← Back to My Orders
+        </a>
+    }
+
+</div>

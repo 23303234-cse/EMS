@@ -1,0 +1,143 @@
+@model List<EMS.Models.Cart>
+
+@{
+    ViewData["Title"] = "My Cart";
+    decimal grandTotal = 0;
+}
+
+<h2 class="mb-4">🛒 My Shopping Cart</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <h5>Your cart is empty.</h5>
+
+        <a asp-controller="Product"
+           asp-action="Index"
+           class="btn btn-primary mt-2">
+            Continue Shopping
+        </a>
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th width="120">Image</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th width="180">Quantity</th>
+                <th>Total</th>
+                <th width="120">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        @foreach (var item in Model)
+        {
+            grandTotal += item.Total;
+
+            <tr>
+
+                <td>
+
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="~/images/products/@item.Image"
+                             width="80"
+                             height="80"
+                             style="object-fit:cover;border-radius:8px;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+
+                </td>
+
+                <td>
+                    <strong>@item.ProductName</strong>
+                </td>
+
+                <td>
+                    ৳ @item.Price
+                </td>
+
+                <td>
+
+                    <a asp-action="Decrease"
+                       asp-route-id="@item.Id"
+                       class="btn btn-danger btn-sm">
+                        -
+                    </a>
+
+                    <span class="mx-3 fw-bold fs-5">
+                        @item.Quantity
+                    </span>
+
+                    <a asp-action="Increase"
+                       asp-route-id="@item.Id"
+                       class="btn btn-success btn-sm">
+                        +
+                    </a>
+
+                </td>
+
+                <td>
+                    <strong class="text-success">
+                        ৳ @item.Total
+                    </strong>
+                </td>
+
+                <td>
+
+                    <a asp-action="Remove"
+                       asp-route-id="@item.Id"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Remove this product from cart?')">
+                        Remove
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+        </tbody>
+
+    </table>
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+               <a asp-controller="Home"
+                asp-action="Dashboard"
+                class="btn btn-primary">
+               ← Continue Shopping
+             </a>
+
+           </div>
+
+         <div class="col-md-6 text-end">
+
+            <h3>
+                Grand Total :
+                <span class="text-success">
+                    ৳ @grandTotal
+                </span>
+            </h3>
+
+            <a asp-controller="Order"
+               asp-action="Checkout"
+               class="btn btn-success btn-lg">
+                Proceed to Checkout →
+            </a>
+
+        </div>
+
+    </div>
+}
