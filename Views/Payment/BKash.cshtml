@@ -23,43 +23,62 @@
 
                     <div class="text-center mb-4">
 
-                        <h5>Demo Payment</h5>
+                        <h5>Safe Payment</h5>
 
-                        <p class="text-muted">
-                            This is a demo payment page.
+                       <p class="text-muted">
+                            Complete your payment using bKash.
                         </p>
 
                     </div>
 
-                    <form asp-action="Success" method="post">
+                    <form asp-action="Success"
+                          method="post"
+                          id="bkashForm">
 
                         <div class="mb-3">
 
-                            <label class="form-label">
+                            <label for="bkashNumber" class="form-label">
                                 bKash Number
                             </label>
 
-                            <input class="form-control"
-                                   type="text"
-                                   placeholder="01XXXXXXXXX"
+                            <input id="bkashNumber"
+                                   name="bkashNumber"
+                                   class="form-control"
+                                   type="tel"
+                                   placeholder="01712345678"
+                                   maxlength="11"
+                                   inputmode="numeric"
                                    required />
+
+                            <div id="bkashNumberError"
+                                 class="text-danger mt-1">
+                            </div>
 
                         </div>
 
                         <div class="mb-4">
 
-                            <label class="form-label">
+                            <label for="pin" class="form-label">
                                 PIN
                             </label>
 
-                            <input class="form-control"
+                            <input id="pin"
+                                   name="pin"
+                                   class="form-control"
                                    type="password"
-                                   placeholder="****"
+                                   placeholder="4-digit PIN"
+                                   maxlength="4"
+                                   inputmode="numeric"
                                    required />
+
+                            <div id="pinError"
+                                 class="text-danger mt-1">
+                            </div>
 
                         </div>
 
-                        <button class="btn w-100 text-white"
+                        <button type="submit"
+                                class="btn w-100 text-white"
                                 style="background:#E2136E;">
 
                             Pay Now
@@ -77,3 +96,59 @@
     </div>
 
 </div>
+
+<script>
+
+    const bkashForm = document.getElementById("bkashForm");
+    const bkashNumber = document.getElementById("bkashNumber");
+    const pin = document.getElementById("pin");
+
+    const bkashNumberError =
+        document.getElementById("bkashNumberError");
+
+    const pinError =
+        document.getElementById("pinError");
+
+    bkashForm.addEventListener("submit", function (event) {
+
+        let valid = true;
+
+        bkashNumberError.textContent = "";
+        pinError.textContent = "";
+
+        // Bangladesh mobile number validation
+        const phonePattern = /^01[3-9]\d{8}$/;
+
+        if (!phonePattern.test(bkashNumber.value.trim())) {
+
+            bkashNumberError.textContent =
+                "Enter a valid 11-digit Bangladesh mobile number.";
+
+            bkashNumber.focus();
+
+            valid = false;
+        }
+
+        // PIN validation
+        const pinPattern = /^\d{4}$/;
+
+        if (!pinPattern.test(pin.value.trim())) {
+
+            pinError.textContent =
+                "PIN must contain exactly 4 digits.";
+
+            if (valid) {
+                pin.focus();
+            }
+
+            valid = false;
+        }
+
+        // Stop form submission if invalid
+        if (!valid) {
+            event.preventDefault();
+        }
+
+    });
+
+</script>

@@ -27,6 +27,9 @@ namespace EMS.Services
     public IMongoCollection<Cart> Carts =>
     _database.GetCollection<Cart>("Carts");
 
+    public IMongoCollection<Message> Messages =>
+    _database.GetCollection<Message>("Messages");
+
     public IMongoCollection<Order> Orders =>
     _database.GetCollection<Order>("Orders");
 

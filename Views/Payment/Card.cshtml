@@ -10,7 +10,8 @@
 
             <div class="card shadow-lg border-0">
 
-                <div class="card-header bg-primary text-white text-center">
+                <div class="card-header text-white text-center"
+                     style="background:#0d6efd;">
 
                     <h3 class="mb-0">
                         Credit / Debit Card Payment
@@ -30,81 +31,106 @@
 
                     </div>
 
-                    <form asp-action="Success" method="post">
+                    <form asp-action="Success"
+                          method="post"
+                          id="cardForm">
 
+                        <!-- Card Holder Name -->
                         <div class="mb-3">
 
-                            <label class="form-label">
+                            <label for="cardHolderName" class="form-label">
                                 Card Holder Name
                             </label>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="John Smith"
-                                required>
+                            <input id="cardHolderName"
+                                   name="cardHolderName"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Enter card holder name"
+                                   autocomplete="cc-name"
+                                   required>
+
+                            <div id="cardHolderError"
+                                 class="text-danger mt-1">
+                            </div>
 
                         </div>
 
+                        <!-- Card Number -->
                         <div class="mb-3">
 
-                            <label class="form-label">
+                            <label for="cardNumber" class="form-label">
                                 Card Number
                             </label>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="1234 5678 9012 3456"
-                                maxlength="19"
-                                required>
+                            <input id="cardNumber"
+                                   name="cardNumber"
+                                   type="tel"
+                                   class="form-control"
+                                   placeholder="1234567890123456"
+                                   maxlength="16"
+                                   inputmode="numeric"
+                                   autocomplete="cc-number"
+                                   required>
+
+                            <div id="cardNumberError"
+                                 class="text-danger mt-1">
+                            </div>
 
                         </div>
 
+                        <!-- Expiry Date + CVV -->
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <div class="mb-3">
+                                <label for="expiryDate" class="form-label">
+                                    Expiry Date
+                                </label>
 
-                                    <label class="form-label">
-                                        Expiry Date
-                                    </label>
+                                <input id="expiryDate"
+                                       name="expiryDate"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="MM/YY"
+                                       maxlength="5"
+                                       inputmode="numeric"
+                                       autocomplete="cc-exp"
+                                       required>
 
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="MM/YY"
-                                        required>
-
+                                <div id="expiryError"
+                                     class="text-danger mt-1">
                                 </div>
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-                                <div class="mb-3">
+                                <label for="cvv" class="form-label">
+                                    CVV
+                                </label>
 
-                                    <label class="form-label">
-                                        CVV
-                                    </label>
+                                <input id="cvv"
+                                       name="cvv"
+                                       type="password"
+                                       class="form-control"
+                                       placeholder="123"
+                                       maxlength="3"
+                                       inputmode="numeric"
+                                       autocomplete="cc-csc"
+                                       required>
 
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        placeholder="123"
-                                        maxlength="4"
-                                        required>
-
+                                <div id="cvvError"
+                                     class="text-danger mt-1">
                                 </div>
 
                             </div>
 
                         </div>
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary w-100">
+                        <button type="submit"
+                                class="btn w-100 text-white"
+                                style="background:#0d6efd;">
 
                             💳 Pay Now
 
@@ -121,3 +147,192 @@
     </div>
 
 </div>
+
+<script>
+
+    const cardForm = document.getElementById("cardForm");
+
+    const cardHolderName =
+        document.getElementById("cardHolderName");
+
+    const cardNumber =
+        document.getElementById("cardNumber");
+
+    const expiryDate =
+        document.getElementById("expiryDate");
+
+    const cvv =
+        document.getElementById("cvv");
+
+    const cardHolderError =
+        document.getElementById("cardHolderError");
+
+    const cardNumberError =
+        document.getElementById("cardNumberError");
+
+    const expiryError =
+        document.getElementById("expiryError");
+
+    const cvvError =
+        document.getElementById("cvvError");
+
+
+    cardForm.addEventListener("submit", function (event) {
+
+        let valid = true;
+
+        // Clear previous errors
+        cardHolderError.textContent = "";
+        cardNumberError.textContent = "";
+        expiryError.textContent = "";
+        cvvError.textContent = "";
+
+
+        // ==========================
+        // Card Holder Name
+        // ==========================
+
+        const namePattern = /^[A-Za-z .'-]+$/;
+
+        if (cardHolderName.value.trim() === "") {
+
+            cardHolderError.textContent =
+                "Card holder name is required.";
+
+            cardHolderName.focus();
+
+            valid = false;
+
+        }
+        else if (!namePattern.test(cardHolderName.value.trim())) {
+
+            cardHolderError.textContent =
+                "Enter a valid card holder name.";
+
+            cardHolderName.focus();
+
+            valid = false;
+        }
+
+
+        // ==========================
+        // Card Number
+        // ==========================
+
+        const cardPattern = /^\d{16}$/;
+
+        if (!cardPattern.test(cardNumber.value.trim())) {
+
+            cardNumberError.textContent =
+                "Card number must contain exactly 16 digits.";
+
+            if (valid) {
+                cardNumber.focus();
+            }
+
+            valid = false;
+        }
+
+
+        // ==========================
+        // Expiry Date
+        // ==========================
+
+        const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+
+        if (!expiryPattern.test(expiryDate.value.trim())) {
+
+            expiryError.textContent =
+                "Enter expiry date in MM/YY format.";
+
+            if (valid) {
+                expiryDate.focus();
+            }
+
+            valid = false;
+
+        }
+        else {
+
+            // Check whether expiry date is in the future
+            const parts = expiryDate.value.trim().split("/");
+
+            const month = parseInt(parts[0], 10);
+            const year = 2000 + parseInt(parts[1], 10);
+
+            const now = new Date();
+
+            const currentMonth = now.getMonth() + 1;
+            const currentYear = now.getFullYear();
+
+            if (
+                year < currentYear ||
+                (year === currentYear && month < currentMonth)
+            ) {
+
+                expiryError.textContent =
+                    "Card expiry date must be in the future.";
+
+                if (valid) {
+                    expiryDate.focus();
+                }
+
+                valid = false;
+            }
+        }
+
+
+        // ==========================
+        // CVV
+        // ==========================
+
+        const cvvPattern = /^\d{3}$/;
+
+        if (!cvvPattern.test(cvv.value.trim())) {
+
+            cvvError.textContent =
+                "CVV must contain exactly 3 digits.";
+
+            if (valid) {
+                cvv.focus();
+            }
+
+            valid = false;
+        }
+
+
+        // Stop form submission
+        if (!valid) {
+            event.preventDefault();
+        }
+
+    });
+
+
+    // Only allow digits in numeric fields
+    cardNumber.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "");
+    });
+
+    cvv.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "");
+    });
+
+
+    // Auto format expiry date as MM/YY
+    expiryDate.addEventListener("input", function () {
+
+        let value = this.value.replace(/\D/g, "");
+
+        if (value.length > 4) {
+            value = value.substring(0, 4);
+        }
+
+        if (value.length >= 3) {
+            value = value.substring(0, 2) + "/" + value.substring(2);
+        }
+
+        this.value = value;
+    });
+
+</script>

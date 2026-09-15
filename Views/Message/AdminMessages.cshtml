@@ -1,0 +1,343 @@
+@model List<EMS.Models.Message>
+
+@{
+    ViewData["Title"] = "User Messages";
+
+    TimeZoneInfo bdTimeZone;
+
+    try
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Dhaka");
+    }
+    catch
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
+    }
+}
+
+<style>
+    .admin-message-page {
+        min-height: 80vh;
+        background: #f8fafc;
+        padding: 35px 15px 50px;
+    }
+
+    .admin-message-header {
+        max-width: 1150px;
+        margin: 0 auto 25px;
+    }
+
+    .admin-message-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 5px;
+    }
+
+    .admin-message-subtitle {
+        color: #64748b;
+        margin: 0;
+    }
+
+    .message-admin-card {
+        max-width: 1150px;
+        margin: 0 auto 20px;
+        background: white;
+        border: 0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+    }
+
+    .message-admin-top {
+        padding: 18px 22px;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .user-email {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .message-subject {
+        font-size: 19px;
+        font-weight: 750;
+        color: #1e293b;
+        margin-top: 5px;
+    }
+
+    .message-time {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .message-admin-body {
+        padding: 22px;
+    }
+
+    .message-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-bottom: 7px;
+    }
+
+    .user-message {
+        color: #334155;
+        line-height: 1.75;
+        white-space: pre-wrap;
+        margin-bottom: 22px;
+    }
+
+    .reply-panel {
+        background: #f8fafc;
+        border: 1px solid #e5eaf0;
+        border-radius: 12px;
+        padding: 18px;
+    }
+
+    .reply-panel.replied {
+        background: #f0fdf4;
+        border-color: #ccebd8;
+    }
+
+    .reply-text {
+        color: #334155;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        margin: 0;
+    }
+
+    .reply-form textarea {
+        min-height: 110px;
+        resize: vertical;
+        border-radius: 10px;
+    }
+
+    .reply-form textarea:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13,110,253,.10);
+    }
+
+    .reply-btn {
+        border-radius: 10px;
+        font-weight: 700;
+        padding: 10px 18px;
+    }
+
+    .status-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 6px 10px;
+        border-radius: 20px;
+    }
+
+    .empty-message {
+        max-width: 650px;
+        margin: 70px auto;
+        background: white;
+        border-radius: 18px;
+        padding: 45px 25px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(15,23,42,.07);
+    }
+</style>
+
+
+<div class="admin-message-page">
+
+    <!-- Header -->
+    <div class="admin-message-header">
+
+        <h2 class="admin-message-title">
+            📩 User Messages
+        </h2>
+
+        <p class="admin-message-subtitle">
+            View messages from users and reply to their requests.
+        </p>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success mx-auto"
+             style="max-width:1150px; border-radius:12px;">
+            ✅ @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mx-auto"
+             style="max-width:1150px; border-radius:12px;">
+            ❌ @TempData["Error"]
+        </div>
+    }
+
+
+    @if (!Model.Any())
+    {
+        <div class="empty-message">
+
+            <div style="font-size:55px;">
+                📭
+            </div>
+
+            <h4 class="mt-3">
+                No User Messages
+            </h4>
+
+            <p class="text-muted mb-0">
+                There are no messages from users yet.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        @foreach (var message in Model)
+        {
+            var createdTime = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.SpecifyKind(
+                    message.CreatedAt,
+                    DateTimeKind.Utc),
+                bdTimeZone);
+
+            <div class="message-admin-card">
+
+                <!-- Message Header -->
+                <div class="message-admin-top">
+
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+
+                        <div>
+
+                            <div class="user-email">
+                                👤 @message.UserEmail
+                            </div>
+
+                            <div class="message-subject">
+                                @message.Subject
+                            </div>
+
+                            <div class="message-time mt-1">
+                                Sent on
+                                @createdTime.ToString("dd MMM yyyy hh:mm tt")
+                            </div>
+
+                        </div>
+
+
+                        @if (message.Status == "Replied")
+                        {
+                            <span class="status-badge bg-success text-white">
+                                Replied
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="status-badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Message Body -->
+                <div class="message-admin-body">
+
+                    <div class="message-label">
+                        User Message
+                    </div>
+
+                    <div class="user-message">
+                        @message.MessageText
+                    </div>
+
+
+                    @if (message.Status == "Replied" &&
+                         !string.IsNullOrWhiteSpace(message.Reply))
+                    {
+                        var replyTime = message.RepliedAt.HasValue
+                            ? TimeZoneInfo.ConvertTimeFromUtc(
+                                DateTime.SpecifyKind(
+                                    message.RepliedAt.Value,
+                                    DateTimeKind.Utc),
+                                bdTimeZone)
+                            : (DateTime?)null;
+
+                        <div class="reply-panel replied">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                <div class="message-label text-success mb-0">
+                                    Admin Reply
+                                </div>
+
+                                <span class="status-badge bg-success text-white">
+                                    Replied
+                                </span>
+
+                            </div>
+
+                            <p class="reply-text">
+                                @message.Reply
+                            </p>
+
+                            @if (replyTime.HasValue)
+                            {
+                                <div class="message-time mt-2">
+                                    Replied on
+                                    @replyTime.Value.ToString("dd MMM yyyy hh:mm tt")
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Reply Form -->
+                        <div class="reply-panel">
+
+                            <div class="message-label">
+                                Reply to user
+                            </div>
+
+                            <form asp-action="Reply"
+                                  method="post"
+                                  class="reply-form">
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@message.Id" />
+
+                                <textarea name="reply"
+                                          class="form-control mb-3"
+                                          placeholder="Write your reply here..."
+                                          required></textarea>
+
+                                <button type="submit"
+                                        class="btn btn-primary reply-btn">
+                                    📤 Send Reply
+                                </button>
+
+                            </form>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

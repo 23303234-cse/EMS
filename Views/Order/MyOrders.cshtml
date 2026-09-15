@@ -2,6 +2,17 @@
 
 @{
     ViewData["Title"] = "My Orders";
+
+    TimeZoneInfo bdTimeZone;
+
+    try
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Dhaka");
+    }
+    catch
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
+    }
 }
 
 <h2 class="mb-4">My Orders</h2>
@@ -24,29 +35,26 @@ else
     <table class="table table-bordered table-hover">
 
         <thead class="table-dark">
-
             <tr>
-
                 <th>Order Date</th>
-
                 <th>Total Amount</th>
-
                 <th>Status</th>
-
                 <th>Action</th>
-
             </tr>
-
         </thead>
 
         <tbody>
 
             @foreach (var order in Model)
             {
+                var bangladeshTime = TimeZoneInfo.ConvertTimeFromUtc(
+                    DateTime.SpecifyKind(order.OrderDate, DateTimeKind.Utc),
+                    bdTimeZone);
+
                 <tr>
 
                     <td>
-                        @order.OrderDate.ToString("dd MMM yyyy hh:mm tt")
+                        @bangladeshTime.ToString("dd MMM yyyy hh:mm tt")
                     </td>
 
                     <td>

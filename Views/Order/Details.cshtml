@@ -3,6 +3,21 @@
 
 @{
     ViewData["Title"] = "Order Details";
+
+    TimeZoneInfo bdTimeZone;
+
+    try
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Dhaka");
+    }
+    catch
+    {
+        bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
+    }
+
+    var bangladeshTime = TimeZoneInfo.ConvertTimeFromUtc(
+        DateTime.SpecifyKind(Model.OrderDate, DateTimeKind.Utc),
+        bdTimeZone);
 }
 
 <h2 class="mb-4">Order Details</h2>
@@ -22,7 +37,7 @@
 
         <p>
             <strong>Order Date:</strong>
-            @Model.OrderDate.ToString("dd MMM yyyy hh:mm tt")
+            @bangladeshTime.ToString("dd MMM yyyy hh:mm tt")
         </p>
 
         <p>
@@ -76,7 +91,6 @@
             <tr>
 
                 <td>
-
                     @if (!string.IsNullOrEmpty(item.Image))
                     {
                         <img src="~/images/products/@item.Image"
@@ -88,7 +102,6 @@
                     {
                         <span>No Image</span>
                     }
-
                 </td>
 
                 <td>@item.ProductName</td>

@@ -4,455 +4,310 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container-fluid mt-4">
+<style>
+    body {
+        background: #f6f8fb;
+    }
 
-    <div class="row mb-4">
+    .admin-dashboard {
+        min-height: 100vh;
+        padding: 30px 0 50px;
+    }
 
-        <div class="col-lg-8">
-            <h2 class="fw-bold">
-                📊 Shopping Management Dashboard
-            </h2>
+    /* =========================
+       Dashboard Header
+    ========================== */
 
-            <p class="text-muted">
-                Welcome back,
-                <strong>@Context.Session.GetString("UserName")</strong>
-            </p>
-        </div>
+    .dashboard-header {
+        background: #ffffff;
+        border: 1px solid #e9edf3;
+        border-radius: 18px;
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
 
-        <div class="col-lg-4 text-end">
+    .dashboard-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #172033;
+        margin-bottom: 5px;
+    }
 
-            <a asp-controller="Profile"
-               asp-action="Index"
-               class="btn btn-outline-primary">
+    .dashboard-subtitle {
+        color: #64748b;
+        font-size: 14px;
+        margin: 0;
+    }
 
-                👤 My Profile
+    .profile-btn {
+        border-radius: 10px;
+        padding: 9px 16px;
+        font-weight: 600;
+    }
 
-            </a>
+    /* =========================
+       Statistics Cards
+    ========================== */
 
-        </div>
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        border: 1px solid #e9edf3;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        transition: all 0.25s ease;
+    }
 
-    </div>
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        right: -32px;
+        top: -32px;
+        background: rgba(13, 110, 253, 0.05);
+    }
+
+    .stat-body {
+        padding: 22px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .stat-value {
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+    }
+
+    .icon-blue {
+        background: #eaf2ff;
+    }
+
+    .icon-green {
+        background: #e9f8f0;
+    }
+
+    .icon-orange {
+        background: #fff4df;
+    }
+
+    .icon-red {
+        background: #ffecef;
+    }
+
+    .icon-cyan {
+        background: #e8faff;
+    }
+
+    /* =========================
+       Dashboard Panels
+    ========================== */
+
+    .dashboard-panel {
+        background: #ffffff;
+        border: 1px solid #e9edf3;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        height: 100%;
+    }
+
+    .panel-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #edf1f5;
+        background: #ffffff;
+    }
+
+    .panel-header h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #172033;
+        margin: 0;
+    }
+
+    .chart-container {
+        height: 360px;
+        padding: 20px;
+    }
+
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* =========================
+       Quick Actions
+    ========================== */
+
+    .quick-actions {
+        padding: 20px;
+    }
+
+    .quick-action-btn {
+        border: none;
+        border-radius: 11px;
+        padding: 12px 14px;
+        font-weight: 600;
+        text-align: left;
+        transition: all 0.2s ease;
+    }
+
+    .quick-action-btn:hover {
+        transform: translateX(4px);
+    }
+
+    /* =========================
+       Summary Cards
+    ========================== */
+
+    .summary-card {
+        background: #ffffff;
+        border: 1px solid #e9edf3;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        height: 100%;
+    }
+
+    .summary-header {
+        padding: 15px 20px;
+        color: white;
+        font-weight: 700;
+    }
+
+    .summary-body {
+        padding: 20px;
+    }
+
+    .summary-value {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .summary-text {
+        color: #64748b;
+        font-size: 13px;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* =========================
+       Footer
+    ========================== */
+
+    .dashboard-footer {
+        margin-top: 34px;
+        padding-top: 18px;
+        border-top: 1px solid #dfe5ec;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    /* =========================
+       Responsive
+    ========================== */
+
+    @@media (max-width: 991px) {
+
+        .dashboard-title {
+            font-size: 26px;
+        }
+
+        .chart-container {
+            height: 320px;
+        }
+    }
+
+    @@media (max-width: 767px) {
+
+        .admin-dashboard {
+            padding-top: 18px;
+        }
+
+        .dashboard-header {
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            font-size: 24px;
+        }
+
+        .profile-btn {
+            margin-top: 15px;
+        }
+
+        .chart-container {
+            height: 280px;
+        }
+    }
+</style>
 
 
+<div class="admin-dashboard">
 
-    <!-- Statistics Cards -->
+    <div class="container-fluid">
 
-    <div class="row g-4">
+        <!-- =========================
+             Dashboard Header
+        ========================== -->
 
-        <div class="col-xl-4 col-md-6">
+        <div class="dashboard-header">
 
-            <div class="card border-0 shadow-lg">
+            <div class="row align-items-center">
 
-                <div class="card-body">
+                <div class="col-lg-8">
 
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Total Products
-                            </h6>
-
-                            <h2 class="fw-bold text-primary">
-
-                                @ViewBag.TotalProducts
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            📦
-                        </div>
-
+                    <div class="dashboard-title">
+                        📊 Shopping Management Dashboard
                     </div>
 
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="col-xl-4 col-md-6">
-
-            <div class="card border-0 shadow-lg">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Categories
-                            </h6>
-
-                            <h2 class="fw-bold text-success">
-
-                                @ViewBag.TotalCategories
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            📂
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="col-xl-4 col-md-6">
-
-            <div class="card border-0 shadow-lg">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Users
-                            </h6>
-
-                            <h2 class="fw-bold text-info">
-
-                                @ViewBag.TotalUsers
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            👥
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="col-xl-4 col-md-6">
-
-            <div class="card border-0 shadow-lg">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Orders
-                            </h6>
-
-                            <h2 class="fw-bold text-warning">
-
-                                @ViewBag.TotalOrders
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            🛒
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="col-xl-4 col-md-6">
-
-            <div class="card border-0 shadow-lg">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Revenue
-                            </h6>
-
-                            <h2 class="fw-bold text-success">
-
-                                $@string.Format("{0:N2}", ViewBag.TotalRevenue)
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            💰
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="col-xl-4 col-md-6">
-
-            <div class="card border-0 shadow-lg">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h6 class="text-muted">
-                                Low Stock
-                            </h6>
-
-                            <h2 class="fw-bold text-danger">
-
-                                @ViewBag.LowStock
-
-                            </h2>
-
-                        </div>
-
-                        <div style="font-size:55px;">
-                            ⚠️
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <hr class="my-5">
-
-    <!-- Charts & Quick Actions -->
-
-    <div class="row">
-
-        <!-- Sales Chart -->
-
-        <div class="col-lg-8">
-
-            <div class="card border-0 shadow-lg mb-4">
-
-                <div class="card-header bg-primary text-white">
-
-                    <h5 class="mb-0">
-                        📈 Monthly Sales Analytics
-                    </h5>
-
-                </div>
-
-                <div class="card-body">
-
-                    <canvas id="salesChart" height="110"></canvas>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- Quick Actions -->
-
-        <div class="col-lg-4">
-
-            <div class="card border-0 shadow-lg mb-4">
-
-                <div class="card-header bg-dark text-white">
-
-                    <h5 class="mb-0">
-                        ⚡ Quick Actions
-                    </h5>
-
-                </div>
-
-                <div class="card-body d-grid gap-2">
-
-                    @if (Context.Session.GetString("UserRole") == "Admin")
-                    {
-
-                        <a asp-controller="Product"
-                           asp-action="Index"
-                           class="btn btn-primary">
-
-                            📦 Manage Products
-
-                        </a>
-
-                        <a asp-controller="Category"
-                           asp-action="Index"
-                           class="btn btn-success">
-
-                            📂 Manage Categories
-
-                        </a>
-
-                        <a asp-controller="Order"
-                           asp-action="Index"
-                           class="btn btn-warning">
-
-                            🛒 Manage Orders
-
-                        </a>
-
-                        <a asp-controller="Profile"
-                           asp-action="Index"
-                           class="btn btn-secondary">
-
-                            👤 My Profile
-
-                        </a>
-
-                    }
-                    else
-                    {
-
-                        <a asp-controller="Product"
-                           asp-action="Index"
-                           class="btn btn-success">
-
-                            🛍 Shop Products
-
-                        </a>
-
-                        <a asp-controller="Cart"
-                           asp-action="Index"
-                           class="btn btn-warning">
-
-                            🛒 My Cart
-
-                        </a>
-
-                        <a asp-controller="Order"
-                           asp-action="MyOrders"
-                           class="btn btn-info">
-
-                            📦 My Orders
-
-                        </a>
-
-                        <a asp-controller="Profile"
-                           asp-action="Index"
-                           class="btn btn-secondary">
-
-                            👤 My Profile
-
-                        </a>
-
-                    }
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- Dashboard Information -->
-
-    <div class="row">
-
-        <div class="col-md-6">
-
-            <div class="card shadow border-0 mb-4">
-
-                <div class="card-header bg-success text-white">
-
-                    <h5 class="mb-0">
-
-                        💰 Revenue Summary
-
-                    </h5>
-
-                </div>
-
-                <div class="card-body">
-
-                    <h2 class="text-success">
-
-                        $@string.Format("{0:N2}", ViewBag.TotalRevenue)
-
-                    </h2>
-
-                    <p class="text-muted">
-
-                        Total revenue generated from all completed orders.
-
+                    <p class="dashboard-subtitle">
+                        Welcome back,
+                        <strong>
+                            @Context.Session.GetString("UserName")
+                        </strong>
+                        — here's your store overview.
                     </p>
 
                 </div>
 
-            </div>
+                <div class="col-lg-4 text-lg-end">
 
-        </div>
-
-
-
-        <div class="col-md-6">
-
-            <div class="card shadow border-0 mb-4">
-
-                <div class="card-header bg-danger text-white">
-
-                    <h5 class="mb-0">
-
-                        ⚠ Low Stock Alert
-
-                    </h5>
-
-                </div>
-
-                <div class="card-body">
-
-                    <h2 class="text-danger">
-
-                        @ViewBag.LowStock
-
-                    </h2>
-
-                    <p class="text-muted">
-
-                        Products currently running low on stock.
-
-                    </p>
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-primary profile-btn">
+                        👤 My Profile
+                    </a>
 
                 </div>
 
@@ -460,34 +315,451 @@
 
         </div>
 
-    </div>
-    <!-- Footer -->
-    <div class="mt-4 text-center text-muted">
-        <hr />
-        <small>
-            © @DateTime.Now.Year EMS - Shopping Management System |
+
+        <!-- =========================
+             Statistics Cards
+        ========================== -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Total Products -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Total Products
+                                </div>
+
+                                <p class="stat-value text-primary">
+                                    @ViewBag.TotalProducts
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-blue">
+                                📦
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Categories -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Categories
+                                </div>
+
+                                <p class="stat-value text-success">
+                                    @ViewBag.TotalCategories
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-green">
+                                📂
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Users -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Users
+                                </div>
+
+                                <p class="stat-value text-info">
+                                    @ViewBag.TotalUsers
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-cyan">
+                                👥
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Orders -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Orders
+                                </div>
+
+                                <p class="stat-value text-warning">
+                                    @ViewBag.TotalOrders
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-orange">
+                                🛒
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Revenue -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Total Revenue
+                                </div>
+
+                                <p class="stat-value text-success"
+                                   style="font-size: 24px;">
+
+                                    ৳@string.Format(
+                                        "{0:N2}",
+                                        ViewBag.TotalRevenue)
+
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-green">
+                                💰
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Low Stock -->
+            <div class="col-xl-4 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Low Stock
+                                </div>
+
+                                <p class="stat-value text-danger">
+                                    @ViewBag.LowStock
+                                </p>
+
+                            </div>
+
+                            <div class="stat-icon icon-red">
+                                ⚠️
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Chart + Quick Actions
+        ========================== -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Monthly Sales -->
+            <div class="col-lg-8">
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <h5>
+                            📈 Monthly Sales Analytics
+                        </h5>
+
+                    </div>
+
+                    <div class="chart-container">
+
+                        <canvas id="salesChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Quick Actions -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <h5>
+                            ⚡ Quick Actions
+                        </h5>
+
+                    </div>
+
+                    <div class="quick-actions">
+
+                        @if (Context.Session.GetString("UserRole") == "Admin")
+                        {
+                            <div class="d-grid gap-2">
+
+                                <a asp-controller="Product"
+                                   asp-action="Index"
+                                   class="btn btn-primary quick-action-btn">
+                                    📦 &nbsp; Manage Products
+                                </a>
+
+                                <a asp-controller="Category"
+                                   asp-action="Index"
+                                   class="btn btn-success quick-action-btn">
+                                    📂 &nbsp; Manage Categories
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="Index"
+                                   class="btn btn-warning quick-action-btn">
+                                    🛒 &nbsp; Manage Orders
+                                </a>
+
+                                <a asp-controller="Message"
+                                   asp-action="AdminMessages"
+                                   class="btn btn-info quick-action-btn">
+                                    📩 &nbsp; User Messages
+                                </a>
+
+                                <a asp-controller="Profile"
+                                   asp-action="Index"
+                                   class="btn btn-secondary quick-action-btn">
+                                    👤 &nbsp; My Profile
+                                </a>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-grid gap-2">
+
+                                <a asp-controller="Product"
+                                   asp-action="Index"
+                                   class="btn btn-success quick-action-btn">
+                                    🛍 &nbsp; Shop Products
+                                </a>
+
+                                <a asp-controller="Cart"
+                                   asp-action="Index"
+                                   class="btn btn-warning quick-action-btn">
+                                    🛒 &nbsp; My Cart
+                                </a>
+
+                                <a asp-controller="Order"
+                                   asp-action="MyOrders"
+                                   class="btn btn-info quick-action-btn">
+                                    📦 &nbsp; My Orders
+                                </a>
+
+                                <a asp-controller="Profile"
+                                   asp-action="Index"
+                                   class="btn btn-secondary quick-action-btn">
+                                    👤 &nbsp; My Profile
+                                </a>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Summary Section
+        ========================== -->
+
+        <div class="row g-4">
+
+            <!-- Revenue Summary -->
+            <div class="col-md-6">
+
+                <div class="summary-card">
+
+                    <div class="summary-header bg-success">
+                        💰 &nbsp; Revenue Summary
+                    </div>
+
+                    <div class="summary-body">
+
+                        <div class="summary-value text-success">
+
+                            ৳@string.Format(
+                                "{0:N2}",
+                                ViewBag.TotalRevenue)
+
+                        </div>
+
+                        <p class="summary-text">
+                            Total revenue generated from all completed orders.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Low Stock Alert -->
+            <div class="col-md-6">
+
+                <div class="summary-card">
+
+                    <div class="summary-header bg-danger">
+                        ⚠️ &nbsp; Low Stock Alert
+                    </div>
+
+                    <div class="summary-body">
+
+                        <div class="summary-value text-danger">
+                            @ViewBag.LowStock
+                        </div>
+
+                        <p class="summary-text">
+                            Products currently running low on stock.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Footer
+        ========================== -->
+
+        <div class="dashboard-footer">
+
+            © @DateTime.Now.Year
+            EMS - Shopping Management System
+            &nbsp; | &nbsp;
             Dashboard Version 2.0
-        </small>
+
+        </div>
+
     </div>
 
 </div>
 
-@section Scripts{
+
+@section Scripts {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
 
-        const months = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Months));
-        const sales = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Sales));
+        const months =
+            @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                    ViewBag.Months));
 
-        const ctx = document.getElementById('salesChart');
+        const sales =
+            @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                    ViewBag.Sales));
+
+        const ctx =
+            document.getElementById("salesChart");
 
         if (ctx) {
 
             new Chart(ctx, {
 
-                type: 'bar',
+                type: "bar",
 
                 data: {
 
@@ -495,20 +767,22 @@
 
                     datasets: [{
 
-                        label: 'Monthly Orders',
+                        label: "Monthly Orders",
 
                         data: sales,
 
                         backgroundColor: [
-                            '#0d6efd',
-                            '#198754',
-                            '#ffc107',
-                            '#dc3545',
-                            '#20c997',
-                            '#6f42c1'
+                            "#0d6efd",
+                            "#198754",
+                            "#ffc107",
+                            "#dc3545",
+                            "#20c997",
+                            "#6f42c1"
                         ],
 
-                        borderRadius: 8
+                        borderRadius: 8,
+
+                        borderSkipped: false
 
                     }]
 
@@ -518,12 +792,12 @@
 
                     responsive: true,
 
+                    maintainAspectRatio: false,
+
                     plugins: {
 
                         legend: {
-
                             display: true
-
                         }
 
                     },
@@ -532,7 +806,11 @@
 
                         y: {
 
-                            beginAtZero: true
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0
+                            }
 
                         }
 

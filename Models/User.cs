@@ -19,6 +19,11 @@ namespace EMS.Models
 
         public string Password { get; set; } = string.Empty;
 
+        // Confirm Password is only for registration
+        // It will NOT be saved in MongoDB
+        [BsonIgnore]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
         public string Role { get; set; } = "User";
 
         public string? ProfileImage { get; set; }

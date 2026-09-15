@@ -15,6 +15,67 @@ namespace EMS.Controllers
         }
 
         // ==========================
+        // Buy Now
+        // ==========================
+        public IActionResult BuyNow(string id)
+        {
+            if (HttpContext.Session.GetString("UserEmail") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            string email = HttpContext.Session.GetString("UserEmail")!;
+
+            var product = _mongoDbService.Products
+                .Find(x => x.Id == id)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Check stock
+            if (product.Stock <= 0)
+            {
+                TempData["Error"] = "This product is out of stock.";
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            // Check if product already exists in user's cart
+            var existingCartItem = _mongoDbService.Carts
+                .Find(x => x.UserEmail == email && x.ProductId == product.Id)
+                .FirstOrDefault();
+
+            if (existingCartItem == null)
+            {
+                var cartItem = new Cart
+                {
+                    UserEmail = email,
+                    ProductId = product.Id,
+                    ProductName = product.ProductName,
+                    Price = product.Price,
+                    Quantity = 1,
+                    Image = product.Image
+                };
+
+                _mongoDbService.Carts.InsertOne(cartItem);
+            }
+            else
+            {
+                // Increase quantity if already in cart
+                var update = Builders<Cart>.Update
+                    .Inc(x => x.Quantity, 1);
+
+                _mongoDbService.Carts.UpdateOne(
+                    x => x.Id == existingCartItem.Id,
+                    update);
+            }
+
+            return RedirectToAction("Checkout");
+        }
+
+        // ==========================
         // Checkout
         // ==========================
         public IActionResult Checkout()
@@ -70,7 +131,7 @@ namespace EMS.Controllers
                 Order order = new Order
                 {
                     UserEmail = email,
-                    OrderDate = DateTime.Now,
+                    OrderDate = DateTime.UtcNow,
                     Status = "Pending",
                     PaymentMethod = paymentMethod,
                     PaymentStatus = "Pending",
@@ -91,9 +152,11 @@ namespace EMS.Controllers
 
                 _mongoDbService.Orders.InsertOne(order);
 
-                _mongoDbService.Carts.DeleteMany(x => x.UserEmail == email);
+                _mongoDbService.Carts.DeleteMany(
+                    x => x.UserEmail == email);
 
-                TempData["Success"] = "Order placed successfully.";
+                TempData["Success"] =
+                    "Order placed successfully.";
 
                 return RedirectToAction("MyOrders");
             }
@@ -101,7 +164,9 @@ namespace EMS.Controllers
             // --------------------------
             // Online Payment
             // --------------------------
-            HttpContext.Session.SetString("PaymentMethod", paymentMethod);
+            HttpContext.Session.SetString(
+                "PaymentMethod",
+                paymentMethod);
 
             if (paymentMethod == "bKash")
             {
@@ -199,7 +264,8 @@ namespace EMS.Controllers
                 x => x.Id == id,
                 update);
 
-            TempData["Success"] = "Order status updated successfully.";
+            TempData["Success"] =
+                "Order status updated successfully.";
 
             return RedirectToAction("Index");
         }

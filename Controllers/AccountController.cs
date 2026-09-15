@@ -54,34 +54,124 @@ namespace EMS.Controllers
             return RedirectToAction("Dashboard", "Home");
         }
 
-        // ==========================
-        // Register (POST)
-        // ==========================
-        [HttpPost]
-        public IActionResult Register(User user)
-        {
-            var existingUser = _mongoDbService.Users
-                .Find(x => x.Email == user.Email)
-                .FirstOrDefault();
+      // ==========================
+// Register (POST)
+// ==========================
+[HttpPost]
+public IActionResult Register(User user)
+{
+    // Name validation
+    if (string.IsNullOrWhiteSpace(user.Name))
+    {
+        ModelState.AddModelError("Name", "Name is required.");
+    }
+    else if (user.Name.Trim().Length < 2)
+    {
+        ModelState.AddModelError("Name", "Name must be at least 2 characters.");
+    }
 
-            if (existingUser != null)
-            {
-                ViewBag.Message = "Email already exists!";
-                return View();
-            }
+    // Phone validation
+    if (string.IsNullOrWhiteSpace(user.Phone))
+    {
+        ModelState.AddModelError("Phone", "Phone number is required.");
+    }
+    else if (!System.Text.RegularExpressions.Regex.IsMatch(
+        user.Phone.Trim(), @"^01[3-9]\d{8}$"))
+    {
+        ModelState.AddModelError(
+            "Phone",
+            "Enter a valid Bangladesh phone number (e.g. 01712345678).");
+    }
 
-            user.Role = "User";
+    // Email validation
+    if (string.IsNullOrWhiteSpace(user.Email))
+    {
+        ModelState.AddModelError("Email", "Email is required.");
+    }
+    else
+    {
+        var emailValidator =
+    new System.ComponentModel.DataAnnotations.EmailAddressAttribute();
 
-            // Default profile image
-            user.ProfileImage = "";
+    if (!emailValidator.IsValid(user.Email))
+    {
+    ModelState.AddModelError("Email", "Enter a valid email address.");
+    }
+    else if (user.Email.Any(char.IsUpper))
+    {
+        ModelState.AddModelError(
+        "Email",
+        "Email must be entered in lowercase letters only.");
+    }
+    }
 
-            _mongoDbService.Users.InsertOne(user);
+    // Password validation
+    if (string.IsNullOrWhiteSpace(user.Password))
+    {
+        ModelState.AddModelError("Password", "Password is required.");
+    }
+    else if (user.Password.Length < 6)
+    {
+        ModelState.AddModelError(
+            "Password",
+            "Password must be at least 6 characters.");
+    }
+    // Confirm Password validation
+if (string.IsNullOrWhiteSpace(user.ConfirmPassword))
+{
+    ModelState.AddModelError(
+        "ConfirmPassword",
+        "Confirm Password is required.");
+}
 
-            TempData["Success"] = "Registration Successful! Please Login.";
+else if (user.Password != user.ConfirmPassword)
+{
+    ModelState.AddModelError(
+        "ConfirmPassword",
+        "Passwords do not match.");
+}
 
-            return RedirectToAction("Login");
-        }
+    // Stop if validation fails
+    if (!ModelState.IsValid)
+    {
+        return View(user);
+    }
 
+    // Check duplicate email
+    var existingEmail = _mongoDbService.Users
+        .Find(x => x.Email == user.Email)
+        .FirstOrDefault();
+
+    if (existingEmail != null)
+    {
+        ModelState.AddModelError("Email", "Email already exists!");
+        return View(user);
+    }
+
+    // Check duplicate phone
+    var existingPhone = _mongoDbService.Users
+        .Find(x => x.Phone == user.Phone)
+        .FirstOrDefault();
+
+    if (existingPhone != null)
+    {
+        ModelState.AddModelError("Phone", "Phone number already exists!");
+        return View(user);
+    }
+
+    // Default role
+    user.Role = "User";
+
+    // Default profile image
+    user.ProfileImage = "";
+
+    // Save user
+    _mongoDbService.Users.InsertOne(user);
+
+    TempData["Success"] = "Registration Successful! Please Login.";
+
+    return RedirectToAction("Login");
+}
         // ==========================
         // Logout
         // ==========================

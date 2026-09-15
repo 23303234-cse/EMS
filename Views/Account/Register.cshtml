@@ -1,30 +1,397 @@
 @model EMS.Models.User
 
-<h2>Register</h2>
+@{
+    ViewData["Title"] = "Register";
+}
 
-<form asp-action="Register" method="post">
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+     style="background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);">
 
-    <label>Name</label><br />
-    <input asp-for="Name" />
-    <br /><br />
+    <div class="row w-100 justify-content-center">
 
-    <label>Phone</label><br />
-    <input asp-for="Phone" />
-    <br /><br />
+        <div class="col-11 col-sm-9 col-md-6 col-lg-5">
 
-    <label>Email</label><br />
-    <input asp-for="Email" />
-    <br /><br />
+            <div class="card border-0 shadow-lg"
+                 style="border-radius: 20px; overflow: hidden;">
 
-    <label>Password</label><br />
-    <input asp-for="Password" type="password" />
-    <br /><br />
+                <!-- Header -->
+                <div class="text-center text-white p-4"
+                     style="background: linear-gradient(135deg, #198754, #0d6efd);">
 
-    <button type="submit">Register</button>
+                    <div class="mb-2" style="font-size: 40px;">
+                        🛍️
+                    </div>
 
-</form>
+                    <h2 class="fw-bold mb-1">
+                        Create Account
+                    </h2>
 
-@if (ViewBag.Message != null)
-{
-    <p style="color:green">@ViewBag.Message</p>
+                    <p class="mb-0 opacity-75">
+                        Join EMS Shopping System
+                    </p>
+
+                </div>
+
+                <!-- Form -->
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="Register"
+                          method="post"
+                          id="registerForm">
+
+                        <!-- Name -->
+                        <div class="mb-3">
+
+                            <label asp-for="Name"
+                                   class="form-label fw-semibold">
+                                Full Name
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light">
+                                    👤
+                                </span>
+
+                                <input asp-for="Name"
+                                       id="name"
+                                       class="form-control"
+                                       placeholder="Enter your full name"
+                                       autocomplete="name" />
+
+                            </div>
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+
+                            <label asp-for="Phone"
+                                   class="form-label fw-semibold">
+                                Phone Number
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light">
+                                    📱
+                                </span>
+
+                                <input asp-for="Phone"
+                                       id="phone"
+                                       type="tel"
+                                       class="form-control"
+                                       placeholder="01712345678"
+                                       maxlength="11"
+                                       inputmode="numeric"
+                                       autocomplete="tel" />
+
+                            </div>
+
+                            <span asp-validation-for="Phone"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="mb-3">
+
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold">
+                                Email Address
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light">
+                                    📧
+                                </span>
+
+                                <input asp-for="Email"
+                                       id="email"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="example@gmail.com"
+                                       autocomplete="email" />
+
+                            </div>
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="mb-3">
+
+                            <label asp-for="Password"
+                                   class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light">
+                                    🔒
+                                </span>
+
+                                <input asp-for="Password"
+                                       id="password"
+                                       type="password"
+                                       class="form-control"
+                                       placeholder="Minimum 6 characters"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="togglePassword">
+                                    👁️
+                                </button>
+
+                            </div>
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+
+                            <label asp-for="ConfirmPassword"
+                                   class="form-label fw-semibold">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light">
+                                    🔐
+                                </span>
+
+                                <input asp-for="ConfirmPassword"
+                                       id="confirmPassword"
+                                       type="password"
+                                       class="form-control"
+                                       placeholder="Re-enter your password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="toggleConfirmPassword">
+                                    👁️
+                                </button>
+
+                            </div>
+
+                            <span asp-validation-for="ConfirmPassword"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Message -->
+                        @if (ViewBag.Message != null)
+                        {
+                            <div class="alert alert-danger text-center py-2">
+                                @ViewBag.Message
+                            </div>
+                        }
+
+
+                        <!-- Register Button -->
+                        <button type="submit"
+                                class="btn btn-success w-100 py-2 fw-semibold"
+                                style="border-radius: 10px;">
+                            ✅ Create Account
+                        </button>
+
+                    </form>
+
+
+                    <!-- Login Link -->
+                    <div class="text-center mt-4">
+
+                        <span class="text-muted">
+                            Already have an account?
+                        </span>
+
+                        <a asp-action="Login"
+                           class="fw-semibold text-decoration-none">
+                            Login Now
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        // ==========================
+        // Show / Hide Password
+        // ==========================
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+                togglePassword.innerHTML = "🙈";
+
+            } else {
+
+                passwordInput.type = "password";
+                togglePassword.innerHTML = "👁️";
+
+            }
+
+        });
+
+
+        // ==========================
+        // Show / Hide Confirm Password
+        // ==========================
+
+        const confirmPasswordInput =
+            document.getElementById("confirmPassword");
+
+        const toggleConfirmPassword =
+            document.getElementById("toggleConfirmPassword");
+
+        toggleConfirmPassword.addEventListener("click", function () {
+
+            if (confirmPasswordInput.type === "password") {
+
+                confirmPasswordInput.type = "text";
+                toggleConfirmPassword.innerHTML = "🙈";
+
+            } else {
+
+                confirmPasswordInput.type = "password";
+                toggleConfirmPassword.innerHTML = "👁️";
+
+            }
+
+        });
+
+
+        // ==========================
+        // Sequential Validation
+        // ==========================
+
+        const form =
+            document.getElementById("registerForm");
+
+        form.addEventListener("submit", function (event) {
+
+            const name =
+                document.getElementById("name");
+
+            const phone =
+                document.getElementById("phone");
+
+            const email =
+                document.getElementById("email");
+
+            const password =
+                document.getElementById("password");
+
+            const confirmPassword =
+                document.getElementById("confirmPassword");
+
+
+            // Name
+            if (name.value.trim() === "") {
+
+                event.preventDefault();
+                name.focus();
+                return;
+            }
+
+
+            if (name.value.trim().length < 2) {
+
+                event.preventDefault();
+                name.focus();
+                return;
+            }
+
+
+            // Phone
+            const phonePattern =
+                /^01[3-9]\d{8}$/;
+
+            if (!phonePattern.test(phone.value.trim())) {
+
+                event.preventDefault();
+                phone.focus();
+                return;
+            }
+
+
+            // Email
+            const emailPattern =
+                /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+            if (!emailPattern.test(email.value.trim())) {
+
+                event.preventDefault();
+                email.focus();
+                return;
+            }
+
+
+            // Password
+            if (password.value.length < 6) {
+
+                event.preventDefault();
+                password.focus();
+                return;
+            }
+
+
+            // Confirm Password
+            if (
+                confirmPassword.value === "" ||
+                password.value !== confirmPassword.value
+            ) {
+
+                event.preventDefault();
+                confirmPassword.focus();
+                return;
+            }
+
+        });
+
+    </script>
+
 }

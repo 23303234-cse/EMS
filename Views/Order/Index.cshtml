@@ -127,29 +127,54 @@
 
                                     @if (order.Status == "Pending")
                                     {
-                                        <option value="Pending" selected>Pending</option>
+                                        <option value="Pending" selected>
+                                            Pending
+                                        </option>
                                     }
                                     else
                                     {
-                                        <option value="Pending">Pending</option>
+                                        <option value="Pending">
+                                            Pending
+                                        </option>
                                     }
 
                                     @if (order.Status == "Processing")
                                     {
-                                        <option value="Processing" selected>Processing</option>
+                                        <option value="Processing" selected>
+                                            Processing
+                                        </option>
                                     }
                                     else
                                     {
-                                        <option value="Processing">Processing</option>
+                                        <option value="Processing">
+                                            Processing
+                                        </option>
                                     }
 
                                     @if (order.Status == "Delivered")
                                     {
-                                        <option value="Delivered" selected>Delivered</option>
+                                        <option value="Delivered" selected>
+                                            Delivered
+                                        </option>
                                     }
                                     else
                                     {
-                                        <option value="Delivered">Delivered</option>
+                                        <option value="Delivered">
+                                            Delivered
+                                        </option>
+                                    }
+
+                                    @if (order.Status == "Cancelled")
+                                    {
+                                        <option value="Cancelled" selected>
+                                            Cancelled
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Cancelled">
+                                            Cancelled
+                                        </option>
                                     }
 
                                 </select>

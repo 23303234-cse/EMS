@@ -31,7 +31,8 @@
             <div class="col-md-5 text-center">
 
                 <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
-                     width="250" />
+                     width="250"
+                     alt="Shopping" />
 
             </div>
 
@@ -39,10 +40,12 @@
 
     </div>
 
+
     <!-- Quick Buttons -->
     <div class="row mb-4">
 
-        <div class="col-md-6 col-lg-4 mb-3">
+        <!-- My Cart -->
+        <div class="col-md-6 col-lg-3 mb-3">
 
             <a asp-controller="Cart"
                asp-action="Index"
@@ -52,7 +55,9 @@
 
         </div>
 
-        <div class="col-md-6 col-lg-4 mb-3">
+
+        <!-- My Orders -->
+        <div class="col-md-6 col-lg-3 mb-3">
 
             <a asp-controller="Order"
                asp-action="MyOrders"
@@ -62,7 +67,21 @@
 
         </div>
 
-        <div class="col-md-6 col-lg-4 mb-3">
+
+        <!-- My Messages -->
+        <div class="col-md-6 col-lg-3 mb-3">
+
+            <a asp-controller="Message"
+               asp-action="MyMessages"
+               class="btn btn-info w-100">
+                💬 My Messages
+            </a>
+
+        </div>
+
+
+        <!-- My Profile -->
+        <div class="col-md-6 col-lg-3 mb-3">
 
             <a asp-controller="Profile"
                asp-action="Index"
@@ -74,11 +93,15 @@
 
     </div>
 
+
     <hr />
 
+
+    <!-- Featured Products -->
     <h3 class="mb-4">
         🔥 Featured Products
     </h3>
+
 
     <div class="row">
 
@@ -88,6 +111,8 @@
 
                 <div class="card shadow-sm h-100">
 
+
+                    <!-- Product Image -->
                     @if (!string.IsNullOrEmpty(item.Image))
                     {
                         <img src="~/images/products/@item.Image"
@@ -108,6 +133,8 @@
                         </div>
                     }
 
+
+                    <!-- Product Information -->
                     <div class="card-body">
 
                         <h5 class="card-title">
@@ -122,6 +149,8 @@
                             ৳ @item.Price
                         </h4>
 
+
+                        <!-- Stock Status -->
                         @if (item.Stock > 5)
                         {
                             <span class="badge bg-success">
@@ -143,23 +172,47 @@
 
                     </div>
 
+
+                    <!-- Product Actions -->
                     <div class="card-footer bg-white border-0">
 
                         <div class="d-grid gap-2">
 
+
+                            <!-- Add To Cart -->
                             <a asp-controller="Cart"
                                asp-action="Add"
                                asp-route-id="@item.Id"
                                class="btn btn-primary">
+
                                 🛒 Add To Cart
+
                             </a>
 
-                            <a asp-controller="Checkout"
-                               asp-action="BuyNow"
-                               asp-route-id="@item.Id"
-                               class="btn btn-success">
-                                ⚡ Buy Now
-                            </a>
+
+                            <!-- Buy Now -->
+                            @if (item.Stock > 0)
+                            {
+                                <a asp-controller="Order"
+                                   asp-action="BuyNow"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-success">
+
+                                    ⚡ Buy Now
+
+                                </a>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        disabled>
+
+                                    Out of Stock
+
+                                </button>
+                            }
+
 
                         </div>
 
